@@ -1,0 +1,22 @@
+CREATE DATABASE banco;
+
+CREATE TABLE pessoa(
+nome VARCHAR(50),
+cpf VARCHAR(11) PRIMARY KEY,
+dep boolean
+);
+
+CREATE TABLE cartao(
+id INT PRIMARY KEY,
+numero CHAR(19),
+validade VARCHAR(7),
+cod CHAR(3),
+limite FLOAT,
+saldo FLOAT,
+pagamento FLOAT,
+dep BOOLEAN,
+cpfPessoa VARCHAR(11),
+
+CONSTRAINT fkCartao FOREIGN KEY(cpfPessoa)
+REFERENCES pessoa(cpf)
+);
