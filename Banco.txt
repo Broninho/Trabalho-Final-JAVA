@@ -1,0 +1,144 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Banco {
+    public static ArrayList<Cliente> clientes = new ArrayList<>();
+    
+    public Banco (){
+  
+    }
+
+    public static void realizarTransacao(String est, float v,Cliente c,int opCart){
+        Cartao cartao = c.getCartoes().get(opCart);
+        cartao.transacao(v);
+        System.out.println("---------------------------------");
+        System.out.println("Transação realizada com sucesso.");
+        System.out.println("Saldo atual: "+cartao.getSaldo());
+        System.out.println("Limite atual: "+cartao.getLimite());
+        System.out.println("---------------------------------");
+    }
+    //===========================FATURA===================================
+    public static void pagarFatura(Cliente c,int opCart){
+        Cartao cartao = c.getCartoes().get(opCart);
+        System.out.println("---------------------------------");
+        System.out.println("Valor da fatura a ser pago: "+cartao.getPagamento());
+        System.out.println("Quanto deseja pagar: ");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Digite o valor: ");
+        float v;
+        do{
+            v = sc.nextFloat();
+            if(v > cartao.getPagamento() && v < 0){
+                System.out.println("Valor inválido.\nDigite novamente:");
+            }
+        }while(v > cartao.getPagamento() && v < 0);
+        sc.close();
+        cartao.pagarFatura(v);
+        System.out.println("Fatura paga com sucesso.");
+        System.out.println("Saldo atual: "+cartao.getSaldo());
+        System.out.println("Limite atual: "+cartao.getLimite());
+        System.out.println("---------------------------------");
+    }
+    //===========================CONSULTA SALDO===================================
+    public static void consultarSaldo(Cliente c,int opCart){
+        Cartao cartao = c.getCartoes().get(opCart);
+        System.out.println("---------------------------------");
+        System.out.println("Saldo atual: "+cartao.getSaldo());
+        System.out.println("---------------------------------");
+
+    }
+   //===========================CONSULTA CARTAO==================================='
+    public static void consultarCartao(Cliente c,int opCart){
+    	CartaoDAO cd = new CartaoDAO();
+        ArrayList<Cartao> l = cd.consultarCartao(opCart);
+        for(Cartao cartao: l){
+            System.out.println("---------------------------------");
+            if(cartao.isDep()){
+                System.out.println("CARTÃO ADICIONAL");
+                System.out.println("---------------------------------");
+            }else{
+                System.out.println("CARTÃO PRINCIPAL");
+                System.out.println("---------------------------------");
+            }
+            System.out.println("Titular do cartão: "+c.getNome());
+            System.out.println("Numero do cartão: "+cartao.getNumCartao());
+            System.out.println("Data de validade: "+cartao.getDataVal());
+            System.out.println("Código de segurança: "+cartao.getCodSeg());
+            System.out.println("Saldo: "+cartao.getSaldo());
+            System.out.println("Limite: "+cartao.getLimite());
+            System.out.println("Valor da fatura: "+cartao.getPagamento());
+        }
+
+
+
+    }
+    //===========================CONSULTA CLIENTES===================================
+    public static void consultarClientes(){
+        ClienteDAO cd = new ClienteDAO();
+        ArrayList<Cliente> a = cd.consultarTodos();
+        if (a != null){
+	        for(Cliente c: a) {
+	        	System.out.println("---------------------------------");
+	        	System.out.println("Nome: "+c.getNome());
+	        	System.out.println("CPF: "+c.getCpf());
+	        }
+        }else {
+        	System.out.println("Não existe nenhum cliente.");
+        }
+    }
+    //===========================PROCURA CLIENTE===================================
+    public static Cliente consultarPCPF(String cpf){
+        Cliente rt = null;
+        ClienteDAO cd = new ClienteDAO();
+        rt = cd.consultarPCPF(cpf);
+        return rt;
+    }
+    //===========================CADASTRA CLIENTE===================================
+    public static void cadastrarCliente(String nome, String cpf){
+        nome.strip();
+        cpf.strip();
+        Cliente c = new Cliente(nome,cpf);
+        clientes.add(c);
+        System.out.println("---------------------------------");
+        System.out.println("Cliente cadastrado com sucesso.");
+        System.out.println("---------------------------------");
+        
+        ClienteDAO c1 = new ClienteDAO();
+        c1.inserir(c);
+    }
+
+    public static void cadastrarClienteDep(String nome, String cpf,String cpfT){
+        nome.strip();
+        cpf.strip();
+        cpfT.strip();
+        Cliente c = new Cliente(nome,cpf,cpfT);
+        clientes.add(c);
+        System.out.println("---------------------------------");
+        System.out.println("Cliente cadastrado com sucesso.");
+        System.out.println("---------------------------------");
+        
+        ClienteDAO c1 = new ClienteDAO();
+        c1.inserir(c);
+    }
+    //===========================EMITE CARTAO===================================
+    
+    public static boolean emitirCartao(Cliente c,float saldo, float limite,boolean dep){
+
+        
+        return true;
+    }
+    
+    public static void setDepCliente(Cliente d, Cliente t) {
+    	d.setTitular(t);
+    	d.setDep(true);
+    	t.setDependente(d);
+    	ClienteDAO cd = new ClienteDAO();
+    	cd.setDepCliente(d);
+    }
+    
+    public static void setDepCartao(Cartao c, Cliente d) {
+    	ClienteDAO cd = new ClienteDAO();
+    	cd.setDepCartao(c,d);
+    }
+  
+}
