@@ -1,2 +1,2 @@
-# Trabalho-Final-JAVA
-Trabalho Final utilizando banco de dados com java poo
+# Banco em JAVA POO
+Trabalho Final de faculdade, criando um sistema bancário com java poo.
